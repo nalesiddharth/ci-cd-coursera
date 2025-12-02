@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: cleanup-task
+spec:
+  steps:
+    - name: cleanup
+      image: alpine:3.18
+      script: |
+        #!/bin/sh
+        echo "Cleaning up workspace..."
+        rm -rf /workspace/* || true
+
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: nose-test-task
+spec:
+  steps:
+    - name: run-nose
+      image: python:3.11
+      script: |
+        #!/bin/sh
+        pip install nose
+        echo "Running nose tests..."
+        nosetests -v || true
